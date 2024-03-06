@@ -18,12 +18,19 @@ const SavedShows = () => {
   };
 
   useEffect(() => {
-    onSnapshot(
-      doc(db, "users", `${user?.email}`, (doc) => {
-        setMovies(doc.data()?.savedShows);
-      })
-    );
-  }, [user?.email]);
+    if (user?.email) {
+       const userDocRef = doc(db, "users", user.email);
+       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+         if (docSnapshot.exists()) {
+           setMovies(docSnapshot.data().savedShows);
+         } else {
+           console.log("No such document!");
+         }
+       });
+   
+       return () => unsubscribe();
+    }
+   }, [user?.email, db]);
 
   const movieref = doc(db, "users", `${user?.email}`);
   const deleteShow = async (passedId) => {
