@@ -1,23 +1,24 @@
 import React, { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
-import {UserAuth} from '../context/AuthContesxt'
+import { Link, useNavigate } from "react-router-dom";
+import { UserAuth } from "../context/AuthContesxt";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, Setpassword] = useState("");
+  const [phone, setPhone] = useState(0);
   const { user, signUp } = UserAuth({});
-  const navigate=useNavigate()
-  
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signUp(email, password);
-      navigate('/')
+      await signUp(email, password, phone)
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   return (
     <>
       <div className="w-full h-screen">
@@ -47,6 +48,13 @@ const Signup = () => {
                   className="p-3 my-2 bg-gray-700 rounded"
                   type="password"
                   placeholder="Password "
+                  autoComplete="current-password"
+                />
+                <input
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="p-3 my-2 bg-gray-700 rounded"
+                  type="number"
+                  placeholder="phone"
                   autoComplete="current-password"
                 />
                 <button className="bg-red-600  py-3 my-6 rounded font-bold">
